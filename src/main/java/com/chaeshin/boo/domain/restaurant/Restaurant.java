@@ -27,7 +27,7 @@ public class Restaurant {
     private int reviewCnt; // 리뷰 개수
     private int scoreAccum; // 리뷰 누적 점수
 
-    @Column(precision = 3, scale = 1)
+    @Column(precision = 2, scale = 1)
     private BigDecimal scoreAvg; // 리뷰 평균 점수
 
     @Enumerated
