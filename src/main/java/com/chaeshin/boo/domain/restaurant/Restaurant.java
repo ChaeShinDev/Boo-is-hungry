@@ -30,7 +30,7 @@ public class Restaurant {
     @Column(precision = 2, scale = 1)
     private BigDecimal scoreAvg; // 리뷰 평균 점수
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
