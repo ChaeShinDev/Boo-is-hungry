@@ -10,18 +10,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Table(indexes = @Index(name = "restaurant_index", columnList = "name"))
 public class Restaurant {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "restaurant_id")
     private Long id;
 
-    private String restaurantName;
-    private String restaurantImageUrl;
+    private String name;
+    private String imageUrl;
     private String latitude; // 위도
     private String longitude; // 경도
-    private String openingHours;
+    private String businessHours;
     private String address;
     private String phone;
     private int reviewCnt; // 리뷰 개수

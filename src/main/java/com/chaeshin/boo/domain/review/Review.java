@@ -5,13 +5,14 @@ import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
 public class Review {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +36,8 @@ public class Review {
     private String title;
     private String body;
     private String bodyLang; // 본문의 언어코드
-    private LocalDateTime createdAt;
     private int score;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter
+@Getter
 public class TranslatedReview {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
