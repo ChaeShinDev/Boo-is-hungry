@@ -18,4 +18,7 @@ public class TranslatedReview {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")
     private Review review;
+
+    // 편의 기능 메서드
+    public void updateBody(String newBody){this.body = newBody;}
 }

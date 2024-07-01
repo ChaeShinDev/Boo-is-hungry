@@ -40,4 +40,22 @@ public class Review {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+
+    // 편의 기능 메서드 - 수정 API 를 제공하는 필드에 대한 수정 메서드 정의
+
+    /**
+     * 리뷰 제목 수정
+     * @param newTitle
+     */
+    public void updateTitle(String newTitle){this.title = newTitle;}
+
+
+    /**
+     * 리뷰 본문 수정
+     * @param newBody
+     */
+    public void updateBody(String newBody){this.title = newBody;}
+
+
 }
