@@ -1,8 +1,11 @@
 package com.chaeshin.boo.domain.restaurant;
 
 import com.chaeshin.boo.domain.review.Review;
+import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -11,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 @Table(indexes = @Index(name = "restaurant_index", columnList = "name"))
 public class Restaurant {
 
@@ -39,4 +43,5 @@ public class Restaurant {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menus = new ArrayList<>();
+
 }

@@ -20,4 +20,7 @@ public class Notice {
 
     @CreatedDate // TZ 확인하기
     private LocalDateTime createdAt;
+
+    // 편의 기능 메서드
+    public void updateNotice(String newBody){this.body = newBody;}
 }
