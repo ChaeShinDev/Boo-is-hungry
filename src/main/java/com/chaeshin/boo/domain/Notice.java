@@ -1,6 +1,7 @@
 package com.chaeshin.boo.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,4 +21,14 @@ public class Notice {
 
     @CreatedDate // TZ 확인하기
     private LocalDateTime createdAt;
+
+    public Notice() {
+
+    }
+
+    @Builder
+    public Notice(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
 }

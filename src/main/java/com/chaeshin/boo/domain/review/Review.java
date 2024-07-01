@@ -3,6 +3,7 @@ package com.chaeshin.boo.domain.review;
 import com.chaeshin.boo.domain.User;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -40,4 +41,19 @@ public class Review {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    public Review() {
+    }
+
+    @Builder
+    public Review(User user, Restaurant restaurant, List<ReviewImage> reviewImages,
+                  List<TranslatedReview> translatedReviews, String title,
+                  String body, String bodyLang, int score) {
+        this.user = user;
+        this.restaurant = restaurant;
+        this.title = title;
+        this.body = body;
+        this.bodyLang = bodyLang;
+        this.score = score;
+    }
 }

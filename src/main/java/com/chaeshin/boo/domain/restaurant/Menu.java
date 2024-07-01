@@ -1,6 +1,7 @@
 package com.chaeshin.boo.domain.restaurant;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -17,4 +18,14 @@ public class Menu {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+
+    public Menu() {
+    }
+
+    @Builder
+    public Menu(String name, String imageUrl, Restaurant restaurant) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.restaurant = restaurant;
+    }
 }

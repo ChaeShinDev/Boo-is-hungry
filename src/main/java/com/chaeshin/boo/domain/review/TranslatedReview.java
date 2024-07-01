@@ -1,6 +1,7 @@
 package com.chaeshin.boo.domain.review;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,4 +19,14 @@ public class TranslatedReview {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "review_id")
     private Review review;
+
+    public TranslatedReview() {
+    }
+
+    @Builder
+    public TranslatedReview(String body, String bodyLang, Review review) {
+        this.body = body;
+        this.bodyLang = bodyLang;
+        this.review = review;
+    }
 }

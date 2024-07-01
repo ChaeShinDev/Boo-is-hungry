@@ -2,8 +2,8 @@ package com.chaeshin.boo.domain;
 
 import com.chaeshin.boo.domain.review.Review;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,4 +22,13 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
+
+    public User() {}
+
+    @Builder
+    public User(String googleId, String nickname, String userLang) {
+        this.googleId = googleId;
+        this.nickname = nickname;
+        this.userLang = userLang;
+    }
 }

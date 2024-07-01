@@ -2,6 +2,7 @@ package com.chaeshin.boo.domain.restaurant;
 
 import com.chaeshin.boo.domain.review.Review;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,4 +40,25 @@ public class Restaurant {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menus = new ArrayList<>();
+
+    public Restaurant() {
+    }
+
+    @Builder
+    public Restaurant(String name, String imageUrl, String latitude,
+                      String longitude, String businessHours,
+                      String address, String phone, int reviewCnt,
+                      int scoreAccum, BigDecimal scoreAvg, Category category) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.businessHours = businessHours;
+        this.address = address;
+        this.phone = phone;
+        this.reviewCnt = reviewCnt;
+        this.scoreAccum = scoreAccum;
+        this.scoreAvg = scoreAvg;
+        this.category = category;
+    }
 }
