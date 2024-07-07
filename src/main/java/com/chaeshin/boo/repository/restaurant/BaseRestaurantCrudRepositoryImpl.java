@@ -12,6 +12,13 @@ import org.springframework.stereotype.Repository;
 public class BaseRestaurantCrudRepositoryImpl implements BaseRestaurantCrudRepository {
 
     @PersistenceContext EntityManager em;
+
+    /**
+     * WILL BE DEPRECATED!!!
+     * @param name
+     * @return
+     */
+
     @Override
     public List<Restaurant> findByName(String name) {
 
