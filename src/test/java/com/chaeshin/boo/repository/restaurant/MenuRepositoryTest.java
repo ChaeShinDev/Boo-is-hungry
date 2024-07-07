@@ -37,7 +37,7 @@ public class MenuRepositoryTest {
 
         // when
         Menu createdMenu = menuRepository.save(menu);
-        List<Menu> foundMenu = menuRepository.findAllByRestaurant(restaurant.getId());
+        List<Menu> foundMenu = menuRepository.findAllByRestaurantId(restaurant.getId());
 
         // then
         Assertions.assertFalse(foundMenu.isEmpty());

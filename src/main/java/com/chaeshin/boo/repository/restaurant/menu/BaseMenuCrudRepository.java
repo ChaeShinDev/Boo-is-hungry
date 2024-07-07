@@ -12,5 +12,5 @@ public interface BaseMenuCrudRepository {
      * @param restaurantId
      * @return
      */
-    List<Menu> findAllByRestaurant(Long restaurantId);
+    List<Menu> findAllByRestaurantId(Long restaurantId);
 }

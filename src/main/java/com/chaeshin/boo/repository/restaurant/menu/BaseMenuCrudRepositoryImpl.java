@@ -16,7 +16,7 @@ public class BaseMenuCrudRepositoryImpl implements BaseMenuCrudRepository {
      * @param restaurantId
      * @return
      */
-    public List<Menu> findAllByRestaurant(Long restaurantId){
+    public List<Menu> findAllByRestaurantId(Long restaurantId){
         return em.createQuery("select m from Menu m where m.restaurant.id = :restaurantId", Menu.class)
                 .setParameter("restaurantId", restaurantId)
                 .getResultList();
