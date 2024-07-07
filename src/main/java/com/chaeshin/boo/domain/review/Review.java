@@ -1,10 +1,10 @@
 package com.chaeshin.boo.domain.review;
 
-import com.chaeshin.boo.domain.User;
+import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -20,8 +20,9 @@ public class Review {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @NotNull
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
@@ -40,6 +41,26 @@ public class Review {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    // 양방향 연관관계 편의 메서드
+
+    /**
+     * Review - Member 양방향 관계 설정 편의 메서드
+     * @param member
+     */
+    public void updateMember(Member member){
+        this.member = member;
+        member.getReviews().add(this);
+    }
+
+    /**
+     * Review - Restaurant 양방향 관계 설정 편의 메서드
+     * @param restaurant
+     */
+    public void updateRestaurant(Restaurant restaurant){
+        this.restaurant = restaurant;
+        restaurant.getReviews().add(this);
+    }
 
 
     // 편의 기능 메서드 - 수정 API 를 제공하는 필드에 대한 수정 메서드 정의

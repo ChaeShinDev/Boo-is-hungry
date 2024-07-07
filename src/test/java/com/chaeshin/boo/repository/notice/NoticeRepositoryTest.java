@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -20,10 +19,10 @@ public class NoticeRepositoryTest {
     void 공지_생성(){
         // given
         Notice notice = new Notice();
-        ReflectionTestUtils.setField(notice, "id", 1L);
 
         // when
         Notice created = noticeRepository.save(notice);
+        System.out.println(created.getId());
 
         // then
         Assertions.assertNotNull(created);
@@ -33,10 +32,10 @@ public class NoticeRepositoryTest {
     void 공지_조회(){
         //given
         Notice notice = new Notice();
-        ReflectionTestUtils.setField(notice, "id", 1L);
 
         //when
         Notice created = noticeRepository.save(notice);
+        System.out.println(created.getId());
         Optional<Notice> found = noticeRepository.findById(created.getId());
 
         // then
@@ -49,11 +48,11 @@ public class NoticeRepositoryTest {
 
         // given
         Notice notice = new Notice();
-        ReflectionTestUtils.setField(notice, "id", 1L);
-        noticeRepository.save(notice);
+        Notice created = noticeRepository.save(notice);
+        System.out.println(created.getId());
 
         // when
-        noticeRepository.updateNotice(notice.getId(), "updated!");
+        noticeRepository.updateNotice(created.getId(), "updated!");
         Optional<Notice> found = noticeRepository.findById(notice.getId());
 
         // then
@@ -66,11 +65,11 @@ public class NoticeRepositoryTest {
     void 공지_삭제(){
         //given
         Notice notice = new Notice();
-        ReflectionTestUtils.setField(notice, "id", 1L);
+        Notice created = noticeRepository.save(notice);
+        System.out.println(created.getId());
 
         // when
-        Notice created = noticeRepository.save(notice);
-        noticeRepository.delete(notice);
+        noticeRepository.delete(created);
         Optional<Notice> found = noticeRepository.findById(created.getId());
 
         // then

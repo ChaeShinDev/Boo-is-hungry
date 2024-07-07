@@ -1,14 +1,16 @@
 package com.chaeshin.boo.repository.review;
 
+import com.chaeshin.boo.domain.Member;
+import com.chaeshin.boo.domain.review.Review;
 import com.chaeshin.boo.domain.review.TranslatedReview;
-import com.chaeshin.boo.repository.review.translatedReview.BaseTranslatedReviewRepository;
+import com.chaeshin.boo.repository.member.MemberRepository;
 import com.chaeshin.boo.repository.review.translatedReview.TranslatedReviewRepository;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -18,52 +20,69 @@ public class TranslatedReviewTest {
     @Autowired
     TranslatedReviewRepository translatedReviewRepository;
     @Autowired ReviewRepository reviewRepository;
+    @Autowired MemberRepository memberRepository;
 
-    /**
-     * @NotNull 제약 추가시 테스트 수정해야함.
-     */
+
     @Test
     void 리뷰_번역_생성(){
         // given
-        TranslatedReview transR = new TranslatedReview();
-        ReflectionTestUtils.setField(transR, "body", "Translated");
+        Member member = new Member();
+        Review review = new Review();
+
+        review.updateMember(member);
+
+        memberRepository.save(member);
+        Review savedReview = reviewRepository.save(review);
+
+        TranslatedReview transR = TranslatedReview.createTranslatedReview(savedReview);
 
         // when
-        TranslatedReview created = translatedReviewRepository.save(transR);
+        TranslatedReview savedTr = translatedReviewRepository.save(transR);
 
         // then
-        Assertions.assertNotNull(created);
-        Assertions.assertEquals(created.getBody(), transR.getBody());
+        Assertions.assertNotNull(savedTr);
     }
 
     @Test
     void 리뷰_번역_조회(){
         // given
-        TranslatedReview transR = new TranslatedReview();
-        ReflectionTestUtils.setField(transR, "body", "Translated");
-        ReflectionTestUtils.setField(transR, "id", 1L);
+        Member member = new Member();
+        Review review = new Review();
+
+        review.updateMember(member);
+
+        memberRepository.save(member);
+        Review savedReview = reviewRepository.save(review);
+
+        TranslatedReview transTr = TranslatedReview.createTranslatedReview(savedReview);
 
         // when
-        translatedReviewRepository.save(transR);
-        Optional<TranslatedReview> found = translatedReviewRepository.findById(transR.getId());
+        TranslatedReview savedTr = translatedReviewRepository.save(transTr);
+        Optional<TranslatedReview> found = translatedReviewRepository.findById(savedTr.getId());
 
         // then
         Assertions.assertTrue(found.isPresent());
-        Assertions.assertEquals(found.get().getId(), transR.getId());
+        Assertions.assertEquals(found.get().getId(), savedTr.getId());
     }
 
     @Test
     void 리뷰_번역_수정(){
         // given
-        TranslatedReview transR = new TranslatedReview();
-        ReflectionTestUtils.setField(transR, "body", "Translated");
-        ReflectionTestUtils.setField(transR, "id", 1L);
+        Member member = new Member();
+        Review review = new Review();
+
+        review.updateMember(member);
+
+        memberRepository.save(member);
+        Review savedReview = reviewRepository.save(review);
+
+        TranslatedReview transTr = TranslatedReview.createTranslatedReview(savedReview);
 
         // when
-        translatedReviewRepository.save(transR);
-        translatedReviewRepository.updateTranslatedReview(1L, "changed!");
+        TranslatedReview savedTr = translatedReviewRepository.save(transTr);
+        translatedReviewRepository.updateTranslatedReview(savedTr.getId(), "changed!");
 
-        Optional<TranslatedReview> found = translatedReviewRepository.findById(1L);
+        Optional<TranslatedReview> found = translatedReviewRepository.findById(savedTr.getId());
 
         // then
         Assertions.assertTrue(found.isPresent());
@@ -75,18 +94,49 @@ public class TranslatedReviewTest {
     @Test
     void 리뷰_번역_삭제(){
         // given
-        TranslatedReview transR = new TranslatedReview();
-        ReflectionTestUtils.setField(transR, "body", "Translated");
-        ReflectionTestUtils.setField(transR, "id", 1L);
+        Member member = new Member();
+        Review review = new Review();
 
-        TranslatedReview created = translatedReviewRepository.save(transR);
+        review.updateMember(member);
+
+        memberRepository.save(member);
+        Review savedReview = reviewRepository.save(review);
+
+        TranslatedReview transTr = TranslatedReview.createTranslatedReview(savedReview);
+        TranslatedReview savedTr = translatedReviewRepository.save(transTr);
 
         // when
-        translatedReviewRepository.delete(created);
-        Optional<TranslatedReview> found = translatedReviewRepository.findById(created.getId());
+        translatedReviewRepository.delete(savedTr);
+        Optional<TranslatedReview> found = translatedReviewRepository.findById(savedTr.getId());
 
         // then
         Assertions.assertFalse(found.isPresent());
+    }
+
+    @Test
+    void 리뷰_id_전체조회(){
+
+        // given
+        Member member = new Member();
+        Review review = new Review();
+
+        review.updateMember(member);
+
+        memberRepository.save(member);
+        Review savedReview = reviewRepository.save(review);
+
+        TranslatedReview tr1 = TranslatedReview.createTranslatedReview(savedReview);
+        TranslatedReview tr2 = TranslatedReview.createTranslatedReview(savedReview);
+
+        TranslatedReview tr1Saved = translatedReviewRepository.save(tr1);
+        TranslatedReview tr2Saved = translatedReviewRepository.save(tr2);
+
+        // when
+        List<TranslatedReview> trs = translatedReviewRepository.findAllByReviewId(savedReview.getId());
+
+        // then
+        Assertions.assertEquals(2, trs.size());
+
     }
 
 

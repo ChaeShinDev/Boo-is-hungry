@@ -1,8 +1,8 @@
 package com.chaeshin.boo.repository.review.reviewImage;
 
 import com.chaeshin.boo.domain.review.ReviewImage;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReviewImageRepository extends CrudRepository<ReviewImage, Long> {
+public interface ReviewImageRepository extends JpaRepository<ReviewImage, Long> {
 
 }

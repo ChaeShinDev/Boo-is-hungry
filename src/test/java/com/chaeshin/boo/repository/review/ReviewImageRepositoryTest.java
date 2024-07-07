@@ -1,7 +1,9 @@
 package com.chaeshin.boo.repository.review;
 
+import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.review.Review;
 import com.chaeshin.boo.domain.review.ReviewImage;
+import com.chaeshin.boo.repository.member.MemberRepository;
 import com.chaeshin.boo.repository.review.reviewImage.ReviewImageRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -20,85 +22,98 @@ public class ReviewImageRepositoryTest {
 
     @Autowired ReviewImageRepository reviewImageRepository;
     @Autowired ReviewRepository reviewRepository;
+    @Autowired MemberRepository memberRepository;
 
     @Test
     void 리뷰_이미지_생성(){
-        // given
-        ReviewImage reviewImage = new ReviewImage();
-        Review review = new Review();
-        ReflectionTestUtils.setField(review, "id", 1L);
-        reviewRepository.save(review);
 
+        // given
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
+        Review review = new Review();
+        review.updateMember(savedMember);
+        Review savedReview = reviewRepository.save(review);
+
+        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
         ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
-        ReflectionTestUtils.setField(reviewImage, "review", review);
 
         // when
-        ReviewImage created = reviewImageRepository.save(reviewImage);
+        ReviewImage savedImage = reviewImageRepository.save(reviewImage);
 
         // then
-        Assertions.assertNotNull(created);
-        Assertions.assertEquals(created.getImageUrl(), reviewImage.getImageUrl());
+        Assertions.assertTrue(reviewImageRepository.findById(savedImage.getId()).isPresent());
     }
 
     @Test
     void 리뷰_이미지_조회(){
-        // given
-        ReviewImage reviewImage = new ReviewImage();
-        Review review = new Review();
-        ReflectionTestUtils.setField(review, "id", 1L);
-        reviewRepository.save(review);
 
+        // given
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
+        Review review = new Review();
+        review.updateMember(savedMember);
+        Review savedReview = reviewRepository.save(review);
+
+        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
         ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
-        ReflectionTestUtils.setField(reviewImage, "review", review);
-        ReviewImage created = reviewImageRepository.save(reviewImage);
+
+        ReviewImage savedImage = reviewImageRepository.save(reviewImage);
 
         // when
-        Optional<ReviewImage> found = reviewImageRepository.findById(created.getId());
+        Optional<ReviewImage> found = reviewImageRepository.findById(savedImage.getId());
 
         // then
         Assertions.assertTrue(found.isPresent());
-        Assertions.assertEquals(found.get().getId(), created.getId());
+        Assertions.assertEquals(found.get().getId(), savedImage.getId());
 
     }
 
     @Test
     void 리뷰_이미지_수정(){
         // given
-        ReviewImage reviewImage = new ReviewImage();
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
         Review review = new Review();
-        ReflectionTestUtils.setField(review, "id", 1L);
-        reviewRepository.save(review);
+        review.updateMember(savedMember);
+        Review savedReview = reviewRepository.save(review);
 
+        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
         ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
-        ReflectionTestUtils.setField(reviewImage, "review", review);
 
-        ReviewImage created = reviewImageRepository.save(reviewImage);
+        ReviewImage savedImage = reviewImageRepository.save(reviewImage);
+
 
         // when
-        created.updateReviewImage("/any/changed");
-        Optional<ReviewImage> found = reviewImageRepository.findById(created.getId());
+        savedImage.updateReviewImage("/any/changed");
+        Optional<ReviewImage> found = reviewImageRepository.findById(savedImage.getId());
 
         // then
         Assertions.assertTrue(found.isPresent());
-        Assertions.assertEquals(found.get().getImageUrl(), created.getImageUrl());
+        Assertions.assertEquals(found.get().getImageUrl(), savedImage.getImageUrl());
     }
 
     @Test
     void 리뷰_이미지_삭제(){
         // given
-        ReviewImage reviewImage = new ReviewImage();
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
         Review review = new Review();
-        ReflectionTestUtils.setField(review, "id", 1L);
-        reviewRepository.save(review);
+        review.updateMember(savedMember);
+        Review savedReview = reviewRepository.save(review);
 
+        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
         ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
-        ReflectionTestUtils.setField(reviewImage, "review", review);
 
-        reviewImageRepository.save(reviewImage);
+        ReviewImage savedImage = reviewImageRepository.save(reviewImage);
+
 
         // when
-        reviewImageRepository.delete(reviewImage);
-        Optional<ReviewImage> found = reviewImageRepository.findById(reviewImage.getId());
+        reviewImageRepository.delete(savedImage);
+        Optional<ReviewImage> found = reviewImageRepository.findById(savedImage.getId());
 
         // then
         Assertions.assertFalse(found.isPresent());

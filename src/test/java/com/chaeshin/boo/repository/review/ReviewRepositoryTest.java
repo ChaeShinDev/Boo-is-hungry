@@ -1,10 +1,10 @@
 package com.chaeshin.boo.repository.review;
 
-import com.chaeshin.boo.domain.User;
+import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import com.chaeshin.boo.domain.review.Review;
+import com.chaeshin.boo.repository.member.MemberRepository;
 import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
-import com.chaeshin.boo.repository.user.UserRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -19,100 +19,101 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewRepositoryTest {
 
     @Autowired ReviewRepository reviewRepository;
-    @Autowired UserRepository userRepository;
+    @Autowired
+    MemberRepository memberRepository;
     @Autowired RestaurantRepository restaurantRepository;
 
     @Test
     void 리뷰_저장(){
         // given
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
         Review review = new Review();
-        ReflectionTestUtils.setField(review, "id", 1L);
+        review.updateMember(savedMember);
 
         // when
-        Review found = reviewRepository.save(review);
+        Review savedReview = reviewRepository.save(review);
 
         // then
-        Assertions.assertNotNull(found);
-        Assertions.assertEquals(found.getId(), review.getId());
+        Assertions.assertNotNull(savedReview);
+
     }
 
     @Test
     void 리뷰_ID_조회(){
 
         // given
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
         Review review = new Review();
-        ReflectionTestUtils.setField(review, "id", 1L);
-        reviewRepository.save(review);
+        review.updateMember(savedMember);
+        Review savedReview = reviewRepository.save(review);
 
         // when
-        Optional<Review> found = reviewRepository.findById(review.getId());
+        Optional<Review> foundReview = reviewRepository.findById(savedReview.getId());
 
         // then
-        Assertions.assertTrue(found.isPresent());
-        Assertions.assertEquals(found.get().getId(), review.getId());
+        Assertions.assertTrue(foundReview.isPresent());
+        Assertions.assertEquals(foundReview.get().getId(), savedReview.getId());
     }
 
     @Test
     void 회원_ID_리뷰_조회(){
         // given
-        User user = new User();
-        ReflectionTestUtils.setField(user, "nickname", "testUser");
-        ReflectionTestUtils.setField(user, "id", 1L);
-        userRepository.save(user);
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
+        Review review = new Review();
+        review.updateMember(savedMember);
+        Review savedReview = reviewRepository.save(review);
 
         // when
-        Review review = new Review();
-        ReflectionTestUtils.setField(review, "user", user);
-        reviewRepository.save(review);
-
-        List<Review> found = reviewRepository.findAllByUserId(user.getId());
+        List<Review> foundReview = reviewRepository.findAllByMemberId(savedMember.getId());
 
         // then
-        Assertions.assertFalse(found.isEmpty());
-        Assertions.assertEquals(found.get(0).getUser().getId(), user.getId());
+        Assertions.assertFalse(foundReview.isEmpty());
+        Assertions.assertTrue(foundReview.contains(savedReview)); // Internally checks if `.equals(Item i, Object O)'.
 
     }
 
     @Test
     void 식당_ID_리뷰_조회(){
         // given
+        Member member = new Member();
+        Member savedMember = memberRepository.save(member);
+
         Restaurant res = new Restaurant();
-        ReflectionTestUtils.setField(res, "name", "testRes");
-        ReflectionTestUtils.setField(res, "id", 1L);
-        restaurantRepository.save(res);
+        Restaurant savedRes = restaurantRepository.save(res);
+
+        Review review = new Review();
+        review.updateMember(savedMember);
+        review.updateRestaurant(savedRes);
+
+        Review savedReview = reviewRepository.save(review);
 
         // when
-        Review review = new Review();
-        ReflectionTestUtils.setField(review, "restaurant", res);
-        reviewRepository.save(review);
-
         List<Review> found = reviewRepository.findAllByRestaurantId(res.getId());
 
         // then
         Assertions.assertFalse(found.isEmpty());
-        Assertions.assertEquals(found.get(0).getRestaurant().getId(), res.getId());
-    }
-
-
-    /**
-     * Review 수정의 경우 Entity에 편의 기능 - 제목 변경 / 본문 변경 - 을 만들어 두었다.
-     * <p></p>
-     * 이를 활용하여 Service Layer 에서 제공하는 것이 적절하지 않을까? 하는 생각이 든다!
-     */
-    @Test
-    void 리뷰_수정(){
+        Assertions.assertTrue(found.contains(savedReview));
     }
 
     @Test
     void 리뷰_삭제(){
         // given
+        Member member = new Member();
         Review review = new Review();
-        ReflectionTestUtils.setField(review, "id", 1L);
-        reviewRepository.save(review);
+        review.updateMember(member);
+
+        memberRepository.save(member);
+        Review savedReview = reviewRepository.save(review);
 
         // when
-        reviewRepository.delete(review);
-        Optional<Review> found = reviewRepository.findById(review.getId());
+        reviewRepository.delete(savedReview);
+        Optional<Review> found = reviewRepository.findById(savedReview.getId());
 
         // then
         Assertions.assertFalse(found.isPresent());

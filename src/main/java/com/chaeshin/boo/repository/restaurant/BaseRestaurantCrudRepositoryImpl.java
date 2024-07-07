@@ -1,13 +1,11 @@
 package com.chaeshin.boo.repository.restaurant;
 
 import com.chaeshin.boo.domain.restaurant.Restaurant;
-import com.chaeshin.boo.repository.user.BaseUserCrudRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository

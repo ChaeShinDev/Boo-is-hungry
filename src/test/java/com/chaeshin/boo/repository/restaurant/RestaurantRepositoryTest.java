@@ -1,9 +1,6 @@
 package com.chaeshin.boo.repository.restaurant;
 
 import com.chaeshin.boo.domain.restaurant.Restaurant;
-import java.util.List;
-import java.util.Optional;
-import org.aspectj.util.Reflection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +16,7 @@ public class RestaurantRepositoryTest {
 
     @Test
     void 식당_저장(){
+
         // given
         Restaurant res = new Restaurant();
         ReflectionTestUtils.setField(res, "name", "레알라면");
@@ -33,16 +31,16 @@ public class RestaurantRepositoryTest {
 
     @Test
     void 식당_Id_조회(){
+
         // given
         Restaurant res = new Restaurant();
-        ReflectionTestUtils.setField(res, "id", 1L);
 
         // when
-        Restaurant found = restaurantRepository.save(res);
+        Restaurant created = restaurantRepository.save(res);
+        Restaurant found = restaurantRepository.findById(created.getId()).get();
 
         // then
-        Assertions.assertNotNull(found);
-        Assertions.assertEquals(found.getId(), 1L);
+        Assertions.assertEquals(found.getId(), created.getId());
     }
 
     // @Test

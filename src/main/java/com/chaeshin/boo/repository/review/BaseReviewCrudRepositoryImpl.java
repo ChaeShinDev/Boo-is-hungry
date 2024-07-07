@@ -19,9 +19,9 @@ public class BaseReviewCrudRepositoryImpl implements BaseReviewCrudRepository {
      * @return
      */
     @Override
-    public List<Review> findAllByUserId(Long userId) {
-        return em.createQuery("select r from Review r where r.user.id = :userId", Review.class)
-                .setParameter("userId", userId)
+    public List<Review> findAllByMemberId(Long memberId) {
+        return em.createQuery("select r from Review r where r.member.id = :memberId", Review.class)
+                .setParameter("memberId", memberId)
                 .getResultList();
     }
 
