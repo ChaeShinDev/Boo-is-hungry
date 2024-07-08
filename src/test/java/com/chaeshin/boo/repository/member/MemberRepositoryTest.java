@@ -29,10 +29,8 @@ public class MemberRepositoryTest {
 
     @Test
     void 회원_가입_ID_조회(){
-        Member member = new Member();
-
-        ReflectionTestUtils.setField(member, "nickname", "test");
-        Member created = memberRepository.save(member);
+        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").memberLang("kor").build();
+        Member created =memberRepository.save(member);
 
         Optional<Member> found = memberRepository.findById(created.getId()); // Optional<T> : 해당 객체가 null 일지 아닐지 확실하지 않은 경우에 안전하게 객체를 확인하고 처리하기 위한 일종의 Wrapper Class.
 
@@ -42,9 +40,7 @@ public class MemberRepositoryTest {
 
     @Test
     void 닉네임_회원_조회(){
-        Member member = new Member();
-        ReflectionTestUtils.setField(member, "nickname", "test");
-
+        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").memberLang("kor").build();
         Member created = memberRepository.save(member);
 
         System.out.println(created.getId());
@@ -60,10 +56,8 @@ public class MemberRepositoryTest {
 
     @Test
     void 구글_ID_회원_조회(){
-        Member member = new Member();
-        ReflectionTestUtils.setField(member, "googleId", "blah@google.com");
-
-        Member created = memberRepository.save(member);
+        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").memberLang("kor").build();
+        Member created =memberRepository.save(member);
 
         List<Member> found = memberRepository.findByGoogleId(created.getGoogleId());
 
@@ -78,10 +72,8 @@ public class MemberRepositoryTest {
 
     @Test
     void 회원_닉네임_변경(){
-        Member member = new Member();
-        ReflectionTestUtils.setField(member, "nickname", "before");
-
-        Member created = memberRepository.save(member);
+        Member member = Member.builder().googleId("test@gmail.com").nickname("before").memberLang("kor").build();
+        Member created =memberRepository.save(member);
 
         memberRepository.updateNickname(member.getId(), "after");
 
@@ -123,10 +115,9 @@ public class MemberRepositoryTest {
         Review rev2 = Review.builder().member(savedMember).restaurant(savedRes).build();
 
         // when
-        Member created = memberRepository.save(member);
         reviewRepository.save(rev1);
         reviewRepository.save(rev2);
-        Member found = memberRepository.findById(created.getId()).get();
+        Member found = memberRepository.findById(savedMember.getId()).get();
 
         // then
         Assertions.assertEquals(2, found.getReviews().size());

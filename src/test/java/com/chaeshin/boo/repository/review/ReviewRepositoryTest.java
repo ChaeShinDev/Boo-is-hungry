@@ -3,8 +3,10 @@ package com.chaeshin.boo.repository.review;
 import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import com.chaeshin.boo.domain.review.Review;
+import com.chaeshin.boo.domain.review.ReviewImage;
 import com.chaeshin.boo.repository.member.MemberRepository;
 import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
+import com.chaeshin.boo.repository.review.reviewImage.ReviewImageRepository;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +24,8 @@ public class ReviewRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
     @Autowired RestaurantRepository restaurantRepository;
+
+    @Autowired ReviewImageRepository reviewImageRepository;
 
     @Test
     void 리뷰_저장(){
@@ -63,15 +67,19 @@ public class ReviewRepositoryTest {
     }
 
     @Test
-    void 회원_ID_리뷰_조회(){
+    void 회원_ID_리뷰_이미지_함깨_조회(){
         // given
         Member member = new Member();
         Restaurant res = new Restaurant();
+
         Member savedMember = memberRepository.save(member);
         Restaurant savedRes = restaurantRepository.save(res);
 
         Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
+        ReviewImage reviewImage = ReviewImage.builder().review(review).imageUrl("/test").build();
+
         Review savedReview = reviewRepository.save(review);
+        reviewImageRepository.save(reviewImage);
 
         // when
         List<Review> foundReview = reviewRepository.findAllByMemberIdWithImage(savedMember.getId());
@@ -79,27 +87,32 @@ public class ReviewRepositoryTest {
         // then
         Assertions.assertFalse(foundReview.isEmpty());
         Assertions.assertTrue(foundReview.contains(savedReview)); // Internally checks if `.equals(Item i, Object O)'.
+        Assertions.assertEquals(1, foundReview.get(0).getReviewImages().size());
 
     }
 
     @Test
-    void 식당_ID_리뷰_조회(){
+    void 식당_ID_리뷰_이미지_함께_조회(){
         // given
         Member member = new Member();
         Restaurant res = new Restaurant();
+
         Member savedMember = memberRepository.save(member);
         Restaurant savedRes = restaurantRepository.save(res);
 
         Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
+        ReviewImage reviewImage = ReviewImage.builder().review(review).imageUrl("/test").build();
 
         Review savedReview = reviewRepository.save(review);
+        reviewImageRepository.save(reviewImage);
 
         // when
-        List<Review> found = reviewRepository.findAllByRestaurantIdWithImage(res.getId());
+        List<Review> foundReview = reviewRepository.findAllByRestaurantIdWithImage(res.getId());
 
         // then
-        Assertions.assertFalse(found.isEmpty());
-        Assertions.assertTrue(found.contains(savedReview));
+        Assertions.assertFalse(foundReview.isEmpty());
+        Assertions.assertTrue(foundReview.contains(savedReview));
+        Assertions.assertEquals(1, foundReview.get(0).getReviewImages().size());
     }
 
     @Test
@@ -107,6 +120,7 @@ public class ReviewRepositoryTest {
         // given
         Member member = new Member();
         Restaurant res = new Restaurant();
+
         Member savedMember = memberRepository.save(member);
         Restaurant savedRes = restaurantRepository.save(res);
 
