@@ -1,11 +1,9 @@
 package com.chaeshin.boo.repository.restaurant;
 
 import com.chaeshin.boo.domain.restaurant.Restaurant;
+import com.chaeshin.boo.domain.review.Review;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,10 +11,16 @@ public class BaseRestaurantCrudRepositoryImpl implements BaseRestaurantCrudRepos
 
     @PersistenceContext EntityManager em;
 
+    /**
+     * Review의 ID로 해당하는 식당 조회
+     * @param reviewId
+     * @return
+     */
     @Override
-    public Restaurant findByIdWithMenu(Long restaurantId) {
-        return em.createQuery("select r from Restaurant r left join fetch r.menus where r.id = :restaurantId", Restaurant.class)
-                .setParameter("restaurantId", restaurantId)
-                .getSingleResult();
+    public Restaurant findAllByReviewId(Long reviewId) {
+        return em.createQuery("select r from Review r where r.id = :reviewId", Review.class)
+                .setParameter("reviewId", reviewId)
+                .getSingleResult()
+                .getRestaurant();
     }
 }
