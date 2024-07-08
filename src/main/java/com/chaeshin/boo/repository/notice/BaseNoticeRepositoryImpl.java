@@ -13,6 +13,6 @@ public class BaseNoticeRepositoryImpl implements BaseNoticeRepository {
     @Override
     public void updateNotice(Long id, String newBody) {
         Notice notice = em.find(Notice.class, id);
-        notice.updateNotice(newBody);
+        notice.updateBody(newBody);
     }
 }

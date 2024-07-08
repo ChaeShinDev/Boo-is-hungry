@@ -12,13 +12,13 @@ public interface BaseReviewCrudRepository {
      * @param userId
      * @return
      */
-    List<Review> findAllByMemberId(Long memberId);
+    List<Review> findAllByMemberIdWithImage(Long memberId);
 
     /**
      * 식당 ID로 리뷰 조회
      * @param restaurantId
      * @return
      */
-    List<Review> findAllByRestaurantId(Long restaurantId);
+    List<Review> findAllByRestaurantIdWithImage(Long restaurantId);
 
 }

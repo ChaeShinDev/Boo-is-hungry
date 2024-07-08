@@ -44,4 +44,22 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     private List<Menu> menus = new ArrayList<>();
 
+    @Builder
+    public Restaurant(String name, String imageUrl, String latitude,
+                      String longitude, String businessHours,
+                      String address, String phone, int reviewCnt,
+                      int scoreAccum, BigDecimal scoreAvg, Category category) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.businessHours = businessHours;
+        this.address = address;
+        this.phone = phone;
+        this.reviewCnt = reviewCnt;
+        this.scoreAccum = scoreAccum;
+        this.scoreAvg = scoreAvg;
+        this.category = category;
+    }
+
 }

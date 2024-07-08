@@ -42,19 +42,4 @@ public class RestaurantRepositoryTest {
         // then
         Assertions.assertEquals(found.getId(), created.getId());
     }
-
-    // @Test
-    // void 식당_저장_이름으로_조회(){
-    //     // given
-    //     Restaurant restaurant = new Restaurant();
-    //     ReflectionTestUtils.setField(restaurant, "name", "할머니보쌈");
-    //
-    //     // when
-    //     restaurantRepository.save(restaurant);
-    //     List<Restaurant> found = restaurantRepository.findByName("할머니 보쌈");
-    //
-    //     Assertions.assertFalse(found.isEmpty()); // 빈 리스트가 아닌지 체크 -> 실패!
-    //
-    //
-    // }
 }

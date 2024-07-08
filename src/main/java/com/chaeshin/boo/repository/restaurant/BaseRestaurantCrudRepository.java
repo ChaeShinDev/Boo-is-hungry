@@ -6,13 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface BaseRestaurantCrudRepository {
 
-    /**
-     * 이름으로 식당 조회
-     *
-     * @param name
-     * @return
-     */
-    List<Restaurant> findByName(String name);
+    Restaurant findByIdWithMenu(Long restaurantId);
 
 
 }

@@ -4,7 +4,10 @@ import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -13,6 +16,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Review {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,41 +46,28 @@ public class Review {
     @CreatedDate
     private LocalDateTime createdAt;
 
-    // 양방향 연관관계 편의 메서드
-
     /**
-     * Review - Member 양방향 관계 설정 편의 메서드
-     * @param member
+     * 필드를 인자로 갖는 Builder. Member, Restaurant은 필수.
+     * @param member : <b>@NonNull</b>
+     * @param restaurant : <b>@NonNull</b>
+     * @param title
+     * @param body
+     * @param bodyLang
+     * @param score
      */
-    public void updateMember(Member member){
+    @Builder
+    public Review(@NonNull Member member, @NonNull Restaurant restaurant, String title,
+                  String body, String bodyLang, int score) {
         this.member = member;
-        member.getReviews().add(this);
-    }
-
-    /**
-     * Review - Restaurant 양방향 관계 설정 편의 메서드
-     * @param restaurant
-     */
-    public void updateRestaurant(Restaurant restaurant){
         this.restaurant = restaurant;
+        this.title = title;
+        this.body = body;
+        this.bodyLang = bodyLang;
+        this.score = score;
+
+        // 양방향 연관관계 맺어주기
+        member.getReviews().add(this);
         restaurant.getReviews().add(this);
     }
-
-
-    // 편의 기능 메서드 - 수정 API 를 제공하는 필드에 대한 수정 메서드 정의
-
-    /**
-     * 리뷰 제목 수정
-     * @param newTitle
-     */
-    public void updateTitle(String newTitle){this.title = newTitle;}
-
-
-    /**
-     * 리뷰 본문 수정
-     * @param newBody
-     */
-    public void updateBody(String newBody){this.title = newBody;}
-
 
 }

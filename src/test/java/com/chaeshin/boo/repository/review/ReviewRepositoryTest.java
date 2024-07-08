@@ -27,10 +27,11 @@ public class ReviewRepositoryTest {
     void 리뷰_저장(){
         // given
         Member member = new Member();
+        Restaurant res = new Restaurant();
         Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        Review review = new Review();
-        review.updateMember(savedMember);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
 
         // when
         Review savedReview = reviewRepository.save(review);
@@ -45,10 +46,12 @@ public class ReviewRepositoryTest {
 
         // given
         Member member = new Member();
-        Member savedMember = memberRepository.save(member);
+        Restaurant res = new Restaurant();
 
-        Review review = new Review();
-        review.updateMember(savedMember);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
+
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
         // when
@@ -63,14 +66,15 @@ public class ReviewRepositoryTest {
     void 회원_ID_리뷰_조회(){
         // given
         Member member = new Member();
+        Restaurant res = new Restaurant();
         Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        Review review = new Review();
-        review.updateMember(savedMember);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
         // when
-        List<Review> foundReview = reviewRepository.findAllByMemberId(savedMember.getId());
+        List<Review> foundReview = reviewRepository.findAllByMemberIdWithImage(savedMember.getId());
 
         // then
         Assertions.assertFalse(foundReview.isEmpty());
@@ -82,19 +86,16 @@ public class ReviewRepositoryTest {
     void 식당_ID_리뷰_조회(){
         // given
         Member member = new Member();
-        Member savedMember = memberRepository.save(member);
-
         Restaurant res = new Restaurant();
+        Member savedMember = memberRepository.save(member);
         Restaurant savedRes = restaurantRepository.save(res);
 
-        Review review = new Review();
-        review.updateMember(savedMember);
-        review.updateRestaurant(savedRes);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
 
         Review savedReview = reviewRepository.save(review);
 
         // when
-        List<Review> found = reviewRepository.findAllByRestaurantId(res.getId());
+        List<Review> found = reviewRepository.findAllByRestaurantIdWithImage(res.getId());
 
         // then
         Assertions.assertFalse(found.isEmpty());
@@ -105,10 +106,11 @@ public class ReviewRepositoryTest {
     void 리뷰_삭제(){
         // given
         Member member = new Member();
-        Review review = new Review();
-        review.updateMember(member);
+        Restaurant res = new Restaurant();
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        memberRepository.save(member);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
         // when

@@ -1,7 +1,9 @@
 package com.chaeshin.boo.repository.member;
 
 import com.chaeshin.boo.domain.Member;
+import com.chaeshin.boo.domain.restaurant.Restaurant;
 import com.chaeshin.boo.domain.review.Review;
+import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
 import com.chaeshin.boo.repository.review.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberRepositoryTest {
     @Autowired MemberRepository memberRepository;
     @Autowired ReviewRepository reviewRepository;
+    @Autowired RestaurantRepository restaurantRepository;
 
     @PersistenceContext
     EntityManager em;
@@ -112,11 +115,12 @@ public class MemberRepositoryTest {
 
         // given
         Member member = new Member();
-        Review rev1 = new Review();
-        Review rev2 = new Review();
+        Restaurant res = new Restaurant();
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        rev1.updateMember(member);
-        rev2.updateMember(member);
+        Review rev1 = Review.builder().member(savedMember).restaurant(savedRes).build();
+        Review rev2 = Review.builder().member(savedMember).restaurant(savedRes).build();
 
         // when
         Member created = memberRepository.save(member);

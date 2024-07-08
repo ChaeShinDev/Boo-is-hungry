@@ -1,9 +1,11 @@
 package com.chaeshin.boo.repository.review;
 
 import com.chaeshin.boo.domain.Member;
+import com.chaeshin.boo.domain.restaurant.Restaurant;
 import com.chaeshin.boo.domain.review.Review;
 import com.chaeshin.boo.domain.review.ReviewImage;
 import com.chaeshin.boo.repository.member.MemberRepository;
+import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
 import com.chaeshin.boo.repository.review.reviewImage.ReviewImageRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
@@ -23,20 +25,24 @@ public class ReviewImageRepositoryTest {
     @Autowired ReviewImageRepository reviewImageRepository;
     @Autowired ReviewRepository reviewRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired RestaurantRepository restaurantRepository;
+
+    private final String testUrl = "test";
 
     @Test
     void 리뷰_이미지_생성(){
 
         // given
         Member member = new Member();
-        Member savedMember = memberRepository.save(member);
+        Restaurant res = new Restaurant();
 
-        Review review = new Review();
-        review.updateMember(savedMember);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
+
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
-        ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
+        ReviewImage reviewImage = ReviewImage.builder().review(savedReview).imageUrl(testUrl).build();
 
         // when
         ReviewImage savedImage = reviewImageRepository.save(reviewImage);
@@ -50,14 +56,15 @@ public class ReviewImageRepositoryTest {
 
         // given
         Member member = new Member();
-        Member savedMember = memberRepository.save(member);
+        Restaurant res = new Restaurant();
 
-        Review review = new Review();
-        review.updateMember(savedMember);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
+
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
-        ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
+        ReviewImage reviewImage = ReviewImage.builder().review(savedReview).imageUrl(testUrl).build();
 
         ReviewImage savedImage = reviewImageRepository.save(reviewImage);
 
@@ -74,15 +81,15 @@ public class ReviewImageRepositoryTest {
     void 리뷰_이미지_수정(){
         // given
         Member member = new Member();
-        Member savedMember = memberRepository.save(member);
+        Restaurant res = new Restaurant();
 
-        Review review = new Review();
-        review.updateMember(savedMember);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
+
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
-        ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
-
+        ReviewImage reviewImage = ReviewImage.builder().review(savedReview).imageUrl(testUrl).build();
         ReviewImage savedImage = reviewImageRepository.save(reviewImage);
 
 
@@ -99,14 +106,15 @@ public class ReviewImageRepositoryTest {
     void 리뷰_이미지_삭제(){
         // given
         Member member = new Member();
-        Member savedMember = memberRepository.save(member);
+        Restaurant res = new Restaurant();
 
-        Review review = new Review();
-        review.updateMember(savedMember);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
+
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        ReviewImage reviewImage = ReviewImage.createReviewImage(savedReview);
-        ReflectionTestUtils.setField(reviewImage, "imageUrl", "/any/photo");
+        ReviewImage reviewImage = ReviewImage.builder().review(savedReview).imageUrl(testUrl).build();
 
         ReviewImage savedImage = reviewImageRepository.save(reviewImage);
 

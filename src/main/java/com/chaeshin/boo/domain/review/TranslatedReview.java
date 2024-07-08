@@ -2,11 +2,14 @@ package com.chaeshin.boo.domain.review;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class TranslatedReview {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,12 +25,14 @@ public class TranslatedReview {
     private Review review;
 
     // 생성자 메서드
-    public static TranslatedReview createTranslatedReview(Review review){
-        TranslatedReview tr = new TranslatedReview();
-        tr.review = review;
-        review.getTranslatedReviews().add(tr);
+    @Builder
+    public TranslatedReview(String body, String bodyLang, Review review) {
+        this.body = body;
+        this.bodyLang = bodyLang;
+        this.review = review;
 
-        return tr;
+        // 양방향 연관관계 맺어주기
+        review.getTranslatedReviews().add(this);
     }
 
     // 편의 기능 메서드

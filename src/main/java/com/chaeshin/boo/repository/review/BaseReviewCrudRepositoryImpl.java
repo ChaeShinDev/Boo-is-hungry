@@ -19,8 +19,8 @@ public class BaseReviewCrudRepositoryImpl implements BaseReviewCrudRepository {
      * @return
      */
     @Override
-    public List<Review> findAllByMemberId(Long memberId) {
-        return em.createQuery("select r from Review r where r.member.id = :memberId", Review.class)
+    public List<Review> findAllByMemberIdWithImage(Long memberId) {
+        return em.createQuery("select r from Review r left join fetch r.reviewImages where r.member.id = :memberId", Review.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
     }
@@ -31,8 +31,8 @@ public class BaseReviewCrudRepositoryImpl implements BaseReviewCrudRepository {
      * @return
      */
     @Override
-    public List<Review> findAllByRestaurantId(Long restaurantId) {
-        return em.createQuery("select r from Review r where r.restaurant.id = :restaurantId", Review.class)
+    public List<Review> findAllByRestaurantIdWithImage(Long restaurantId) {
+        return em.createQuery("select r from Review r left join fetch r.reviewImages where r.restaurant.id = :restaurantId", Review.class)
                 .setParameter("restaurantId", restaurantId)
                 .getResultList();
     }

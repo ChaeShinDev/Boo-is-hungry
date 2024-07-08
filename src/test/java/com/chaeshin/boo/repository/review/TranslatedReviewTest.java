@@ -1,9 +1,11 @@
 package com.chaeshin.boo.repository.review;
 
 import com.chaeshin.boo.domain.Member;
+import com.chaeshin.boo.domain.restaurant.Restaurant;
 import com.chaeshin.boo.domain.review.Review;
 import com.chaeshin.boo.domain.review.TranslatedReview;
 import com.chaeshin.boo.repository.member.MemberRepository;
+import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
 import com.chaeshin.boo.repository.review.translatedReview.TranslatedReviewRepository;
 import java.util.List;
 import java.util.Optional;
@@ -21,20 +23,24 @@ public class TranslatedReviewTest {
     TranslatedReviewRepository translatedReviewRepository;
     @Autowired ReviewRepository reviewRepository;
     @Autowired MemberRepository memberRepository;
+    @Autowired RestaurantRepository restaurantRepository;
 
 
     @Test
     void 리뷰_번역_생성(){
         // given
         Member member = new Member();
-        Review review = new Review();
+        Restaurant res = new Restaurant();
 
-        review.updateMember(member);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
+
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
 
         memberRepository.save(member);
         Review savedReview = reviewRepository.save(review);
 
-        TranslatedReview transR = TranslatedReview.createTranslatedReview(savedReview);
+        TranslatedReview transR = TranslatedReview.builder().review(savedReview).build();
 
         // when
         TranslatedReview savedTr = translatedReviewRepository.save(transR);
@@ -47,14 +53,15 @@ public class TranslatedReviewTest {
     void 리뷰_번역_조회(){
         // given
         Member member = new Member();
-        Review review = new Review();
+        Restaurant res = new Restaurant();
 
-        review.updateMember(member);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        memberRepository.save(member);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        TranslatedReview transTr = TranslatedReview.createTranslatedReview(savedReview);
+        TranslatedReview transTr = TranslatedReview.builder().review(savedReview).build();
 
         // when
         TranslatedReview savedTr = translatedReviewRepository.save(transTr);
@@ -69,14 +76,15 @@ public class TranslatedReviewTest {
     void 리뷰_번역_수정(){
         // given
         Member member = new Member();
-        Review review = new Review();
+        Restaurant res = new Restaurant();
 
-        review.updateMember(member);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        memberRepository.save(member);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        TranslatedReview transTr = TranslatedReview.createTranslatedReview(savedReview);
+        TranslatedReview transTr = TranslatedReview.builder().review(savedReview).build();
 
         // when
         TranslatedReview savedTr = translatedReviewRepository.save(transTr);
@@ -95,14 +103,15 @@ public class TranslatedReviewTest {
     void 리뷰_번역_삭제(){
         // given
         Member member = new Member();
-        Review review = new Review();
+        Restaurant res = new Restaurant();
 
-        review.updateMember(member);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        memberRepository.save(member);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        TranslatedReview transTr = TranslatedReview.createTranslatedReview(savedReview);
+        TranslatedReview transTr = TranslatedReview.builder().review(savedReview).build();
         TranslatedReview savedTr = translatedReviewRepository.save(transTr);
 
         // when
@@ -118,15 +127,16 @@ public class TranslatedReviewTest {
 
         // given
         Member member = new Member();
-        Review review = new Review();
+        Restaurant res = new Restaurant();
 
-        review.updateMember(member);
+        Member savedMember = memberRepository.save(member);
+        Restaurant savedRes = restaurantRepository.save(res);
 
-        memberRepository.save(member);
+        Review review = Review.builder().member(savedMember).restaurant(savedRes).build();
         Review savedReview = reviewRepository.save(review);
 
-        TranslatedReview tr1 = TranslatedReview.createTranslatedReview(savedReview);
-        TranslatedReview tr2 = TranslatedReview.createTranslatedReview(savedReview);
+        TranslatedReview tr1 = TranslatedReview.builder().review(savedReview).build();
+        TranslatedReview tr2 = TranslatedReview.builder().review(savedReview).build();
 
         TranslatedReview tr1Saved = translatedReviewRepository.save(tr1);
         TranslatedReview tr2Saved = translatedReviewRepository.save(tr2);
