@@ -64,7 +64,7 @@ public class RestaurantRepositoryTest {
         Review savedReview = reviewRepository.save(review);
 
         // when
-        Restaurant foundRes = restaurantRepository.findAllByReviewId(savedReview.getId());
+        Restaurant foundRes = restaurantRepository.findByReviewId(savedReview.getId());
 
         // then
         Assertions.assertEquals(savedRes, foundRes);

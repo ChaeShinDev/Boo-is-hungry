@@ -4,7 +4,7 @@ import com.chaeshin.boo.domain.restaurant.Restaurant;
 
 public interface BaseRestaurantCrudRepository {
 
-    Restaurant findAllByReviewId(Long reviewId);
+    Restaurant findByReviewId(Long reviewId);
 
 
 }

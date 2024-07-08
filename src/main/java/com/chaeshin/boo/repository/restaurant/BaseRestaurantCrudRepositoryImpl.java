@@ -17,7 +17,7 @@ public class BaseRestaurantCrudRepositoryImpl implements BaseRestaurantCrudRepos
      * @return
      */
     @Override
-    public Restaurant findAllByReviewId(Long reviewId) {
+    public Restaurant findByReviewId(Long reviewId) {
         return em.createQuery("select r from Review r where r.id = :reviewId", Review.class)
                 .setParameter("reviewId", reviewId)
                 .getSingleResult()
