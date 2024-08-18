@@ -41,8 +41,9 @@ public class BaseMemberCrudRepositoryImpl implements BaseMemberCrudRepository {
     }
 
     @Override
-    public void updateNickname(Long id, String nickname) {
+    public String updateNickname(Long id, String nickname) {
         Member member = em.find(Member.class, id); // Q. 예외 처리를 어떻게 할 것인가?
         member.updateMemberNickname(nickname); // Dirty Check 와 Domain 편의 기능을 함께 활용한 변경 Query method.
+        return member.getNickname();
     }
 }

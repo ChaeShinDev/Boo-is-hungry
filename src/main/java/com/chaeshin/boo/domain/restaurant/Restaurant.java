@@ -62,4 +62,15 @@ public class Restaurant {
         this.category = category;
     }
 
+    // 편의 메서드
+    /**
+     * 새로 작성된 Review 의 평가를 반영하여 식당의 리뷰 평점 갱신.
+     * @param newScore
+     */
+    public void updateScoreAvg(int newScore){
+        this.reviewCnt ++; // Review가 새롭게 생성될 때만 호출되는 메서드임으로 Review 수를 하나 증가시켜준다.
+        this.scoreAccum += newScore;
+        this.scoreAvg = BigDecimal.valueOf(((double) this.scoreAccum / this.reviewCnt));
+    }
+
 }

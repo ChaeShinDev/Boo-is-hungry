@@ -22,6 +22,6 @@ public interface BaseMemberCrudRepository {
      * @param id
      * @param nickname
      */
-    void updateNickname(Long id, String nickname);
+    String updateNickname(Long id, String nickname);
 
 }

@@ -20,16 +20,16 @@ public class Member {
 
     private String googleId; // 구글 PK
     private String nickname;
-    private String memberLang; // 유저 선호 언어
+    private LangCode langCode; // 유저 선호 언어
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
 
     @Builder
-    public Member(@NonNull String googleId, @NonNull String nickname, @NonNull String memberLang) {
+    public Member(@NonNull String googleId, String nickname, LangCode langCode) {
         this.googleId = googleId;
         this.nickname = nickname;
-        this.memberLang = memberLang;
+        this.langCode = langCode;
     }
 
     // 편의 기능 메서드 : 추후 서비스 상 변경을 제공하는 경우를 위해 정의한다

@@ -29,9 +29,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'io.awspring.cloud:spring-cloud-aws-s3:3.2.0-M1' // AWS S3
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6' // JWT
+    implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 제공하는 Spring WebFlux
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64' // Exception 발생 해결 위한 의존성.
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'com.h2database:h2'
