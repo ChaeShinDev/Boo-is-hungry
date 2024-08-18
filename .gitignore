@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 application-local.yml
 src/test/resources/application-test.yml
+src/test/resources/application.yml
 
 ### STS ###
 .apt_generated
