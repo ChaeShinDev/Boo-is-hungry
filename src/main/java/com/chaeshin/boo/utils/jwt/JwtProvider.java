@@ -8,66 +8,38 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import javax.crypto.SecretKey;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
 
-    static private String issuer;
-    static private Long accessExpiration;
-    static private Long refreshExpiration;
-    static private SecretKey secretKey;
-    static private ConcurrentHashMap<String, Date> blackList;
-    static private ScheduledExecutorService scheduler;
+    @Value("${spring.application.name}")
+    private String issuer;
+    @Value("${service.jwt.access-expiration}")
+    private Long accessExpiration;
+    @Value("${service.jwt.refresh-expiration}")
+    private Long refreshExpiration;
+    @Value("${service.jwt.secret-key}")
+    private String key;
+    private SecretKey secretKey;
+    private final TokenBlacklist blackList;
 
     public enum TokenType {
         ACCESS, REFRESH
     }
 
-
-    public JwtProvider(@Value("${spring.application.name}") String issuer,
-                       @Value("${service.jwt.access-expiration}") Long accessExpiration,
-                       @Value("${service.jwt.refresh-expiration}") Long refreshExpiration,
-                       @Value("${service.jwt.secret-key}") String secretKey) {
-        this.issuer = issuer;
-        this.accessExpiration = accessExpiration;
-        this.refreshExpiration = refreshExpiration;
-        this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
-    }
-
-    /*어플리케이션이 실행될 때마다 블랙리스트 및 삭제 스케쥴러 재시작*/
     @PostConstruct
     public void init() {
-        blackList = new ConcurrentHashMap<>();
-        scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(this::removeExpiredTokens, 0, 1, TimeUnit.HOURS);
-    }
-
-    /*블랙리스트 내 토큰 자동 삭제*/
-    private void removeExpiredTokens() {
-        Date now = new Date();
-        blackList.entrySet().removeIf(entry -> entry.getValue().before(now));
-    }
-
-    /*어플리케이션이 종료되면 블랙리스트 자동 삭제 스케쥴러 종료*/
-    @PreDestroy
-    public void cleanup() {
-        if (scheduler != null) {
-            scheduler.shutdown();
-        }
+        this.secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
     }
 
 
@@ -109,7 +81,7 @@ public class JwtProvider {
     public Map<String, String> refreshAccessToken(String refreshToken) {
         try {
             Jws<Claims> claims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(refreshToken);
-            if (!claims.getPayload().get("type").equals(TokenType.REFRESH)) {
+            if (!claims.getPayload().get("type").equals(TokenType.REFRESH.name())) {
                 throw new RuntimeException("유효하지 않은 리프레시 토큰");
             }
             Date expireAt = claims.getPayload().getExpiration();
@@ -123,7 +95,7 @@ public class JwtProvider {
             Map<String, String> tokenMap = new HashMap<>();
             tokenMap.put("access", createAccessToken(memberId));
             tokenMap.put("refresh", createRefreshToken(memberId));
-            blackList.put(refreshToken, expireAt);
+            blackList.put(refreshToken, expireAt.toString());
             return tokenMap;
         } catch (Exception es) {
             throw new ExpiredTokenException();
