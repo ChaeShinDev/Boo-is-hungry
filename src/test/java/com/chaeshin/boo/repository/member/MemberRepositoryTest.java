@@ -1,5 +1,6 @@
 package com.chaeshin.boo.repository.member;
 
+import com.chaeshin.boo.domain.LangCode;
 import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import com.chaeshin.boo.domain.review.Review;
@@ -7,14 +8,14 @@ import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
 import com.chaeshin.boo.repository.review.ReviewRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @SpringBootTest
@@ -29,7 +30,7 @@ public class MemberRepositoryTest {
 
     @Test
     void 회원_가입_ID_조회(){
-        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").memberLang("kor").build();
+        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").langCode(LangCode.KO).build();
         Member created =memberRepository.save(member);
 
         Optional<Member> found = memberRepository.findById(created.getId()); // Optional<T> : 해당 객체가 null 일지 아닐지 확실하지 않은 경우에 안전하게 객체를 확인하고 처리하기 위한 일종의 Wrapper Class.
@@ -40,7 +41,7 @@ public class MemberRepositoryTest {
 
     @Test
     void 닉네임_회원_조회(){
-        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").memberLang("kor").build();
+        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").langCode(LangCode.KO).build();
         Member created = memberRepository.save(member);
 
         System.out.println(created.getId());
@@ -56,7 +57,7 @@ public class MemberRepositoryTest {
 
     @Test
     void 구글_ID_회원_조회(){
-        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").memberLang("kor").build();
+        Member member = Member.builder().googleId("test@gmail.com").nickname("nickname").langCode(LangCode.KO).build();
         Member created =memberRepository.save(member);
 
         List<Member> found = memberRepository.findByGoogleId(created.getGoogleId());
@@ -72,7 +73,7 @@ public class MemberRepositoryTest {
 
     @Test
     void 회원_닉네임_변경(){
-        Member member = Member.builder().googleId("test@gmail.com").nickname("before").memberLang("kor").build();
+        Member member = Member.builder().googleId("test@gmail.com").nickname("before").langCode(LangCode.KO).build();
         Member created =memberRepository.save(member);
 
         memberRepository.updateNickname(member.getId(), "after");

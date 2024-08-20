@@ -1,5 +1,6 @@
 package com.chaeshin.boo.domain.review;
 
+import com.chaeshin.boo.domain.LangCode;
 import com.chaeshin.boo.domain.Member;
 import com.chaeshin.boo.domain.restaurant.Restaurant;
 import jakarta.persistence.*;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class Review {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +43,10 @@ public class Review {
 
     private String title;
     private String body;
-    private String bodyLang; // 본문의 언어코드
     private int score;
+
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode; // 리뷰 본문 언어
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -52,22 +57,34 @@ public class Review {
      * @param restaurant : <b>@NonNull</b>
      * @param title
      * @param body
-     * @param bodyLang
+     * @param langCode
      * @param score
      */
     @Builder
     public Review(@NonNull Member member, @NonNull Restaurant restaurant, String title,
-                  String body, String bodyLang, int score) {
+                  String body, LangCode langCode, int score) {
         this.member = member;
         this.restaurant = restaurant;
         this.title = title;
         this.body = body;
-        this.bodyLang = bodyLang;
+        this.langCode = langCode;
         this.score = score;
 
         // 양방향 연관관계 맺어주기
         member.getReviews().add(this);
-        restaurant.getReviews().add(this);
+        restaurant.addReview(this);
     }
 
+    public void updateReview(String title, String body, int score) {
+        int diff = this.score - score;
+        this.title = title;
+        this.body = body;
+        this.score = score;
+        this.restaurant.updateReview(diff);
+    }
+
+    public void deleteReview() {
+        member.getReviews().remove(this);
+        restaurant.deleteReview(this);
+    }
 }

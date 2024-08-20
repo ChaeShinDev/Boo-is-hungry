@@ -1,12 +1,10 @@
 package com.chaeshin.boo.domain.restaurant;
 
 import com.chaeshin.boo.domain.review.Review;
-import com.chaeshin.boo.repository.restaurant.RestaurantRepository;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -62,4 +60,22 @@ public class Restaurant {
         this.category = category;
     }
 
+    public void addReview(Review review) {
+        reviews.add(review);
+        this.reviewCnt += 1;
+        this.scoreAccum += review.getScore();
+        this.scoreAvg = BigDecimal.valueOf((double)this.scoreAccum / this.reviewCnt);
+    }
+
+    public void updateReview(int diff) {
+        this.scoreAccum += diff;
+        this.scoreAvg = BigDecimal.valueOf((double)this.scoreAccum / this.reviewCnt);
+    }
+
+    public void deleteReview(Review review) {
+        this.reviewCnt -= 1;
+        this.scoreAccum -= review.getScore();
+        this.scoreAvg = BigDecimal.valueOf((double)this.scoreAccum / this.reviewCnt);
+        reviews.remove(review);
+    }
 }

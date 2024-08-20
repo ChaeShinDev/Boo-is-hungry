@@ -11,7 +11,8 @@ spring:
   h2:
     console:
       enabled: true
-
+  profiles.include:
+    - local
 logging:
   level:
     org.hibernate.SQL: debug

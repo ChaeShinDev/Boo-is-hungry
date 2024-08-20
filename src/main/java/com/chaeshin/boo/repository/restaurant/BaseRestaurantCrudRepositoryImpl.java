@@ -6,6 +6,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class BaseRestaurantCrudRepositoryImpl implements BaseRestaurantCrudRepository {
 
@@ -23,4 +25,27 @@ public class BaseRestaurantCrudRepositoryImpl implements BaseRestaurantCrudRepos
                 .getSingleResult()
                 .getRestaurant();
     }
+
+    /**
+     * Restaurant의 ID로 메뉴를 fetch join하여 조회
+     * @param restaurantId
+     * @return
+     */
+    @Override
+    public Restaurant findByIdWithMenus(Long restaurantId) {
+        return em.createQuery("select rt from Restaurant rt" +
+                " left join fetch rt.menus" +
+                " where rt.id = :restaurantId",Restaurant.class)
+                .setParameter("restaurantId", restaurantId)
+                .getSingleResult();
+    }
+
+    @Override
+    public List<Restaurant> findAllByNameContaining(String name) {
+        return em.createQuery("select rt from Restaurant rt" +
+                " where rt.name like :name", Restaurant.class)
+                .setParameter("name", name).getResultList();
+    }
+
+
 }

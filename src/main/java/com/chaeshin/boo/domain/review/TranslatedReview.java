@@ -1,11 +1,11 @@
 package com.chaeshin.boo.domain.review;
 
+import com.chaeshin.boo.domain.LangCode;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -17,7 +17,9 @@ public class TranslatedReview {
     private Long id;
 
     private String body; // 번역된 본문
-    private String bodyLang; // 번역된 언어 코드
+
+    @Enumerated(EnumType.STRING)
+    private LangCode langCode; // 번역된 언어 코드
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @NotNull
@@ -26,9 +28,9 @@ public class TranslatedReview {
 
     // 생성자 메서드
     @Builder
-    public TranslatedReview(String body, String bodyLang, Review review) {
+    public TranslatedReview(String body, LangCode langCode, Review review) {
         this.body = body;
-        this.bodyLang = bodyLang;
+        this.langCode = langCode;
         this.review = review;
 
         // 양방향 연관관계 맺어주기
