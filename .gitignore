@@ -11,12 +11,6 @@ src/main/resources/application-local.yml
 src/main/resources/application-prod.yml
 src/test/resources/application-local.yml
 
-#### Nginx ###
-#server-config/nginx/conf.d/nginx.conf
-
-### Dockerfile ###
-boo/dockerfile-app
-
 
 ### STS ###
 .apt_generated
