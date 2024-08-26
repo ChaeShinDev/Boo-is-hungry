@@ -1,0 +1,3 @@
+[submodule "server-config"]
+	path = server-config
+	url = https://github.com/ChaeShinDev/server-config.git

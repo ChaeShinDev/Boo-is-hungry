@@ -1,17 +1,30 @@
 spring:
+  application:
+    name: boo
+  profiles:
+    group:
+      local: local-profile
+      prod: prod-profile
+
+    default: local
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 1000
         dialect: org.hibernate.dialect.MySQLDialect
-  profiles.include:
-    - local
-    - prod
+
+  servlet:
+    multipart:
+      max-file-size: 5MB # 파일 용량 제한 _ Default : 1MB
+      max-request-size: 10MB # 전체 요청 최대 크기 : 10MB _ 추후 이미지 다중 업로드 상황을 염두에 둔 설정
+
 logging:
   level:
+    org.springframework: DEBUG
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace

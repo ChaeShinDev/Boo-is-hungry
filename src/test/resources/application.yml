@@ -7,12 +7,12 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
   h2:
     console:
       enabled: true
-  profiles.include:
-    - local
+  profiles:
+    include: local
 logging:
   level:
     org.hibernate.SQL: debug

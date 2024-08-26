@@ -4,8 +4,19 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-application-local.yml
-src/test/resources/application-test.yml
+
+### App Configuration ###
+src/main/resources/application-common.yml
+src/main/resources/application-local.yml
+src/main/resources/application-prod.yml
+src/test/resources/application-local.yml
+
+#### Nginx ###
+#server-config/nginx/conf.d/nginx.conf
+
+### Dockerfile ###
+boo/dockerfile-app
+
 
 ### STS ###
 .apt_generated
