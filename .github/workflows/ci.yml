@@ -69,8 +69,8 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: 22
           overwrite: true
-          source: "./server-config/docker-compose.yml"
-          target: "/home/ubuntu/boo"
+          source: "/server-config/docker-compose.yml"
+          target: /home/ubuntu/boo
 
       - name: Docker Compose Up
         uses: appleboy/ssh-action@master
