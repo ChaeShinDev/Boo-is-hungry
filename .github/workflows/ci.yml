@@ -80,7 +80,7 @@ jobs:
           strip_components: 2
 
       - name: Verify docker-compose.yml exists
-        run: ls -al boo/docker-compose.yml
+        run: ls -al docker-compose.yml
         
       - name: Copying nginx.conf into Host System.
         uses: appleboy/scp-action@master
@@ -95,7 +95,7 @@ jobs:
           strip_components: 4
           
       - name: Verify nginx.conf exists
-        run: ls -al boo/nginx/conf.d/nginx.conf
+        run: ls -al nginx/conf.d/nginx.conf
 
       - name: Docker Compose Up
         uses: appleboy/ssh-action@master
