@@ -61,25 +61,19 @@ jobs:
           docker build -f dockerfile-app -t ${{ secrets.DOCKER_USERNAME }}/project-image-repo .
           docker push ${{ secrets.DOCKER_USERNAME }}/project-image-repo
 
-      - name: Copying docker-compose.yml into Host.
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.EC2_KNOWNHOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_KEY }}
-          overwrite: true
-          source: "server-config/docker-compose.yml"
-          target: "/home/ubuntu/boo/"
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - name: Copying nginx configuration into host.
+      - name: Copying docker-compose.yml into Host System.
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_KNOWNHOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
+          port: 22
           overwrite: true
-          source: "server-config/nginx/conf.d/nginx.conf"
-          target: "/home/ubuntu/boo/nginx/conf.d/"
+          source: "/server-config/docker-compose.yml"
+          target: /home/ubuntu/boo
 
       - name: Docker Compose Up
         uses: appleboy/ssh-action@master
@@ -89,7 +83,17 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             cd /home/ubuntu/boo
-            docker-compose up -d
+            docker compose up -d
+
+      - name: Docker Compose Up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_KNOWNHOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            cd /home/ubuntu/boo
+            docker compose up -d
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
