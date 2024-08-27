@@ -68,8 +68,18 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           overwrite: true
-          source: "./server-config/docker-compose.yml"
-          target: "/home/ubuntu/boo/docker-compose.yml"
+          source: "server-config/docker-compose.yml"
+          target: "/home/ubuntu/boo/"
+
+      - name: Copying nginx configuration into host.
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_KNOWNHOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          overwrite: true
+          source: "server-config/nginx/conf.d/nginx.conf"
+          target: "/home/ubuntu/boo/nginx/conf.d/"
 
       - name: Docker Compose Up
         uses: appleboy/ssh-action@master
