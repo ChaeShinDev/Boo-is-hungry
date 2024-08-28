@@ -33,6 +33,12 @@ jobs:
           echo "${{ secrets.APPLICATION }}" | base64 --decode > ./src/main/resources/application-prod.yml
         shell: bash
 
+      - name: Check Configuration
+        run: |
+          ssh -i ${{ secrets.EC2_KEY }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_KNOWNHOST }}
+          cd /home/ubuntu/boo
+          touch ./application-prod.yml
+          echo "${{ secrets.APPLICATION }}" | base64 --decode > ./application-prod.yml
 
       # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
       # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
