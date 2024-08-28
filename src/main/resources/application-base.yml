@@ -1,10 +1,13 @@
 spring:
   application:
     name: boo
+  config:
+    activate:
+      on-profile: base-profile
   profiles:
     group:
-      local: local-profile
-      prod: prod-profile
+      local: base-profile, local-profile
+      prod: base-profile, prod-profile
 
     default: local
 
