@@ -31,6 +31,8 @@ jobs:
         run: |
           touch ./src/main/resources/application-prod.yml
           echo "${{ secrets.APPLICATION_PROD }}" | base64 --decode > ./src/main/resources/application-prod.yml
+          cd ./src/main/resources
+          ls -a
         shell: bash
 
       - name: Checking Configuration File
