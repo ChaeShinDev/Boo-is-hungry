@@ -44,8 +44,9 @@ dependencies {
     testImplementation 'org.projectlombok:lombok'
 
     compileOnly 'org.projectlombok:lombok'
-    compileOnly 'com.mysql:mysql-connector-j'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly "io.jsonwebtoken:jjwt-gson:${JJWT_VERSION}"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${JJWT_VERSION}"
