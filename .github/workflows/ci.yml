@@ -26,14 +26,14 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - uses: actions/checkout@v4
-      - name: Creates DEV Environment Configuration # 정말 마음에 들지 않는 방법이다. Github Action 직접 만드는 게 낫겠다. 바빠서 봐준다.
-        run: |
-          touch ./src/main/resources/application-prod.yml
-          echo "${{ secrets.APPLICATION_PROD }}" > ./src/main/resources/application-prod.yml
-          cd ./src/main/resources
-          ls -a
-        shell: bash
+#      - uses: actions/checkout@v4
+#      - name: Creates DEV Environment Configuration # 정말 마음에 들지 않는 방법이다. Github Action 직접 만드는 게 낫겠다. 바빠서 봐준다.
+#        run: |
+#          touch ./src/main/resources/application-prod.yml
+#          echo "${{ secrets.APPLICATION_PROD }}" > ./src/main/resources/application-prod.yml
+#          cd ./src/main/resources
+#          ls -a
+#        shell: bash
                 
       # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
       # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
