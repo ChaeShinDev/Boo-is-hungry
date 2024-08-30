@@ -25,6 +25,12 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          
+      - name: Checkout Submodule Codes
+        uses: actions/checkout@v4
+        with:
+            submodules: true
+            token: ${{ secrets.MODULE_TOKEN }}
 
 #      - uses: actions/checkout@v4
 #      - name: Creates DEV Environment Configuration # 정말 마음에 들지 않는 방법이다. Github Action 직접 만드는 게 낫겠다. 바빠서 봐준다.
