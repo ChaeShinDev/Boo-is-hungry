@@ -26,23 +26,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           
-      - name: Checkout Submodule Codes
+      - name: Checkout Submodule Codes for copying configuration file from submodule.
         uses: actions/checkout@v4
         with:
             submodules: true
             token: ${{ secrets.MODULE_TOKEN }}
-
-#      - uses: actions/checkout@v4
-#      - name: Creates DEV Environment Configuration # 정말 마음에 들지 않는 방법이다. Github Action 직접 만드는 게 낫겠다. 바빠서 봐준다.
-#        run: |
-#          touch ./src/main/resources/application-prod.yml
-#          echo "${{ secrets.APPLICATION_PROD }}" > ./src/main/resources/application-prod.yml
-#          cd ./src/main/resources
-#          ls -a
-#        shell: bash
-                
-      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+            
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
@@ -85,9 +74,6 @@ jobs:
           source: "./server-config/docker-compose.yml"
           target: /home/ubuntu/boo
           strip_components: 2
-
-      # - name: Verify docker-compose.yml exists
-      #   run: ls -al /home/ubuntu/boo/docker-compose.yml
         
       - name: Copying default.conf into Host System.
         uses: appleboy/scp-action@master
@@ -100,9 +86,6 @@ jobs:
           source: "./server-config/nginx/conf.d/default.conf"
           target: /home/ubuntu/boo/nginx/conf.d
           strip_components: 4
-          
-      # - name: Verify default.conf exists
-      #   run: ls -al /home/ubuntu/boo/nginx/conf.d/default.conf
 
       - name: Docker Compose Up
         uses: appleboy/ssh-action@master
