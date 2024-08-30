@@ -113,6 +113,8 @@ jobs:
           script: |
             cd /home/ubuntu/boo
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker compose down
+            docker pull ${{ secrets.DOCKER_USERNAME }}/project-image-repo
             docker compose up -d
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
