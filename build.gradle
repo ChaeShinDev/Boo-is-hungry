@@ -64,7 +64,6 @@ tasks.named('test') {
 processResources.dependsOn('copySecret')
 
 tasks.register('copySecret', Copy) {
-    from './server-config'
-    include "application-prod.yml"  // 복사할 파일들
+    from './server-config/application-prod.yml' // 복사할 파일
     into 'src/main/resources'  // 복사 위치
 }
