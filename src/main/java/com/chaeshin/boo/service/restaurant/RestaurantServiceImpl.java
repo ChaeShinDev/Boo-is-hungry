@@ -10,6 +10,7 @@ import com.chaeshin.boo.service.restaurant.dto.RestaurantSearchDto;
 import com.chaeshin.boo.utils.ResponseDto;
 import com.chaeshin.boo.utils.geocoding.GeoCoding;
 import com.chaeshin.boo.utils.geocoding.CoordinateDto;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +26,24 @@ import java.util.stream.Collectors;
 public class RestaurantServiceImpl implements RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final KakaoGeoService kakaoGeoService;
     private final MenuRepository menuRepository;
     private final ReviewRepository reviewRepository;
     private final GeoCoding geoCoding;
+
+    /**
+     * RestaurantService 의 초기화 콜백.
+     * <br></br>
+     * <br></br>
+     * <b><i>한국외국어대학 서울캠퍼스 반경 788m 이내의 음식점, 카페 정보를 가져와 Restaurant 엔티티로 만든 후 영속성 컨텍스트에 저장.</i></b>
+     * <br></br>
+     * <br></br>
+     * 사용자에게 제공하기 위한 식당의 Pool 을 조성하는 작업.
+     */
+    @PostConstruct
+    public void init(){
+        kakaoGeoService.initAllRestaurant();
+    }
 
 
     @Override
