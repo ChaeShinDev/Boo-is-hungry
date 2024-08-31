@@ -27,7 +27,7 @@ public class KakaoGeoService {
 
     private final RestaurantRepository restaurantRepository;
 
-    @Value("${kakao.apiKey}")
+    @Value("${kakao.appKey}")
     private String apiKey;
 
     private final String tokenType = "KakaoAK";
