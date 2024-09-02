@@ -75,7 +75,11 @@ public class Restaurant {
     public void deleteReview(Review review) {
         this.reviewCnt -= 1;
         this.scoreAccum -= review.getScore();
-        this.scoreAvg = BigDecimal.valueOf((double)this.scoreAccum / this.reviewCnt);
+        if (reviewCnt == 0) {
+            this.scoreAccum = 0;
+        } else {
+            this.scoreAvg = BigDecimal.valueOf((double)this.scoreAccum / this.reviewCnt);
+        }
         reviews.remove(review);
     }
 }

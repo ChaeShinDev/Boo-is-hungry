@@ -70,7 +70,7 @@ public class ReviewServiceImpl implements ReviewService {
     public ResponseDto<List<ReviewDto>> getReviewsByMemberId(Long memberId) {
         return new ResponseDto<>("해당 유저의 모든 리뷰 불러오기 성공",
                 reviewRepository.findAllByMemberIdWithImage(memberId)
-                        .stream().map(o -> new ReviewDto(o))
+                        .stream().map(ReviewDto::new)
                         .collect(Collectors.toList()));
     }
 
@@ -103,12 +103,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ResponseDto updateReview(Long memberId, Long reviewId, ReviewRequestDto request) {
         Review review = reviewRepository.findById(reviewId).get();
-        Member member = memberRepository.findById(memberId).get();
-        if (review.getMember().getId() != member.getId()) {
+        if (!review.getMember().getId().equals(memberId)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "리뷰 작성자와 유저 불일치");
         }
 
         review.updateReview(request.getTitle(), request.getBody(), request.getScore());
+        List<TranslatedReview> translatedReviews = translatedReviewRepository.findAllByReviewId(review.getId());
+        if (!translatedReviews.isEmpty()) {updateTranslatedReview(review.getBody(), translatedReviews);}
         return new ResponseDto("리뷰 수정 성공", null);
     }
 
@@ -116,8 +117,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public ResponseDto deleteReview(Long memberId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId).get();
-        Member member = memberRepository.findById(memberId).get();
-        if (review.getMember().getId() != member.getId()) {
+        if (!review.getMember().getId().equals(memberId)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "리뷰 작성자와 유저 불일치");
         }
 
@@ -188,5 +188,12 @@ public class ReviewServiceImpl implements ReviewService {
         TranslatedReview translatedReview = TranslatedReview.builder()
                 .review(review).body(text).langCode(targetLang).build();
         return translatedReviewRepository.save(translatedReview);
+    }
+
+
+    private void updateTranslatedReview(String text, List<TranslatedReview> translatedReviews) {
+        for (TranslatedReview tr : translatedReviews) {
+          tr.updateBody(translator.requestTranslate(text, tr.getLangCode()).getTranslatedText());
+        }
     }
 }
