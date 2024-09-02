@@ -1,12 +1,10 @@
 package com.chaeshin.boo.repository.restaurant;
 
 import com.chaeshin.boo.domain.restaurant.Restaurant;
-import com.chaeshin.boo.domain.review.Review;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class BaseRestaurantCrudRepositoryImpl implements BaseRestaurantCrudRepository {
@@ -20,10 +18,10 @@ public class BaseRestaurantCrudRepositoryImpl implements BaseRestaurantCrudRepos
      */
     @Override
     public Restaurant findByReviewId(Long reviewId) {
-        return em.createQuery("select r from Review r where r.id = :reviewId", Review.class)
+        return em.createQuery("select r.restaurant from Review r"
+                + " where r.id = :reviewId", Restaurant.class)
                 .setParameter("reviewId", reviewId)
-                .getSingleResult()
-                .getRestaurant();
+                .getSingleResult();
     }
 
     /**

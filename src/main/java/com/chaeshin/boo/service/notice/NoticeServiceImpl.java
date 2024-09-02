@@ -4,11 +4,11 @@ import com.chaeshin.boo.repository.notice.NoticeRepository;
 import com.chaeshin.boo.service.notice.dto.NoticeDetailDto;
 import com.chaeshin.boo.service.notice.dto.NoticeListDto;
 import com.chaeshin.boo.utils.ResponseDto;
+import java.util.Comparator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +20,9 @@ public class NoticeServiceImpl implements NoticeService {
     @Override
     public ResponseDto<List<NoticeListDto>> getNoticeList() {
         List<NoticeListDto> notices = noticeRepository.findAll()
-                .stream().map(o -> new NoticeListDto(o))
+                .stream()
+                .map(NoticeListDto::new)
+                .sorted(Comparator.comparing(NoticeListDto::getCreatedAt).reversed())
                 .toList();
 
         return new ResponseDto<>("공지사항 목록 불러오기 성공", notices);
