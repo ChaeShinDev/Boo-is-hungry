@@ -114,18 +114,15 @@ public class ReviewController {
         catch (TokenNotFoundException e) {throw e;}
 
         Long memberId = jwtProvider.getMemberId(request);
-        try {
-            if ("PUT".equals(request.getMethod())) {
-                ResponseDto result = reviewService.updateReview(memberId, reviewId, reviewRequestDto);
-                return new ResponseEntity<>(result, HttpStatus.OK);
-            } else if ("DELETE".equals(request.getMethod())) {
-                ResponseDto result = reviewService.deleteReview(memberId, reviewId);
-                return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
-            } else {
-                return new ResponseEntity<>(null, HttpStatus.METHOD_NOT_ALLOWED);
-            }
-        } catch (Exception e){
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+
+        if ("PUT".equals(request.getMethod())) {
+            ResponseDto result = reviewService.updateReview(memberId, reviewId, reviewRequestDto);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else if ("DELETE".equals(request.getMethod())) {
+            ResponseDto result = reviewService.deleteReview(memberId, reviewId);
+            return new ResponseEntity<>(result, HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 
